@@ -1,24 +1,35 @@
 import Swal from "sweetalert2";
-import { nanoid } from "nanoid";
 import { Component } from "react";
-import { Section } from "./components/Section/Section";
-import { Container } from "./components/Container/Container";
-import { ContactForm } from "./components/ContactForm/ContactForm";
-import { ContactList } from "./components/ContactList/ContactList";
-import { Filter } from "./components/Filter/Filter";
 import { RiContactsBook2Fill, RiContactsFill } from "react-icons/ri";
+import { nanoid } from "nanoid";
+import { Section } from "../Section/Section";
+import { Container } from "../Container/Container";
+import { ContactForm } from "../ContactForm/ContactForm";
+import { ContactList } from "../ContactList/ContactList";
+import { Filter } from "../Filter/Filter";
 
 export default class App extends Component {
   state = {
-    contacts: [
-      { id: "id-1", name: "Rosie Simpson", number: "459-12-56" },
-      { id: "id-2", name: "Hermione Kline", number: "443-89-12" },
-      { id: "id-3", name: "Eden Clements", number: "645-17-79" },
-      { id: "id-4", name: "Annie Copeland", number: "227-91-26" },
-      { id: "id-5", name: "Dmitry Karas", number: "511-56-96" },
-    ],
+    contacts: [],
     filter: "",
   };
+
+  componentDidMount() {
+    const contacts = JSON.parse(localStorage.getItem("contacts"));
+
+    if (contacts) {
+      this.setState({ contacts });
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const prevContacts = prevState.contacts;
+    const nextContacts = this.state.contacts;
+
+    if (prevContacts !== nextContacts) {
+      localStorage.setItem("contacts", JSON.stringify(nextContacts));
+    }
+  }
 
   checkContact = (name, number) => {
     const { contacts } = this.state;
@@ -51,10 +62,22 @@ export default class App extends Component {
     }
   };
 
+  addContact = (name, number) => {
+    const id = nanoid();
+
+    this.setState((prevState) => ({
+      contacts: [...prevState.contacts, { id, name, number }],
+    }));
+  };
+
   deleteContact = (contactId) => {
     this.setState(({ contacts }) => ({
       contacts: contacts.filter((contact) => contact.id !== contactId),
     }));
+  };
+
+  handleFilterInputChange = (value) => {
+    this.setState({ filter: value.toLowerCase() });
   };
 
   handleFormSubmit = ({ name, number }) => {
@@ -64,15 +87,7 @@ export default class App extends Component {
       return;
     }
 
-    const id = nanoid();
-
-    this.setState((prevState) => ({
-      contacts: [...prevState.contacts, { id, name, number }],
-    }));
-  };
-
-  handleFilterInputChange = (value) => {
-    this.setState({ filter: value.toLowerCase() });
+    this.addContact(name, number);
   };
 
   render() {
