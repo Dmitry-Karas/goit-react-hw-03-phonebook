@@ -1,0 +1,43 @@
+@import "modern-normalize/modern-normalize.css";
+
+:root {
+  --color-accent: rosybrown;
+  --color-bg: #f3f0e9;
+  --color-dark: #3c3c3c;
+  --color-light: tan;
+}
+
+body {
+  font-family: "Red Hat Text", sans-serif;
+
+  background-color: floralwhite;
+  background-image: url("./images/bg.jpg");
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+a {
+  text-decoration: none;
+}
+
+ul,
+ol {
+  padding: 0;
+  margin: 0;
+
+  list-style: none;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin: 0;
+}
